@@ -3,7 +3,7 @@ import { useSnapshot } from "valtio";
 import state from "../../Utils/Store";
 import StoryCard from "./StoryCard";
 import { PlusOutlined } from "@ant-design/icons";
-import WorkoutStoryService from "../../Services/WorkoutStoryService";
+import StoryService from "../../Services/StoryService";
 
 const TopBox = () => {
   const snap = useSnapshot(state);
@@ -11,10 +11,10 @@ const TopBox = () => {
   useEffect(() => {
     const fetchStories = async () => {
       try {
-        const stories = await WorkoutStoryService.getAllWorkoutStories();
+        const stories = await StoryService.getAllStories();
         state.storyCards = stories;
       } catch (error) {
-        console.error("Error fetching workout stories:", error);
+        console.error("Error fetching  stories:", error);
       }
     };
 
@@ -32,7 +32,7 @@ const TopBox = () => {
       <div className="stories-container">
         <div
           onClick={() => {   
-            state.createWorkoutStatusModalOpened = true;
+            state.createStatusModalOpened = true;
           }}
           className="my_story_card"
         >

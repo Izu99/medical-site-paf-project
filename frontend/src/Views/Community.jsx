@@ -11,9 +11,9 @@ import "../Styles/FriendSection.css";
 import "../Styles/SkillPlan.css";
 import "../Styles/SkillPlanBox.css";
 
-import CreateWorkoutStoryModal from "../Components/Modals/CreateWorkoutStoryModal";
-import WorkoutStory from "../Components/Modals/WorkoutStory";
-import WorkoutStoryService from "../Services/WorkoutStoryService";
+import CreateStoryModal from "../Components/Modals/CreateStoryModal";
+import Story from "../Components/Modals/Story";
+import StoryService from "../Services/StoryService";
 import CenterSection from "../Components/Community/CenterSection";
 import UserProfileModal from "../Components/Modals/UserProfileModal";
 import state from "../Utils/Store";
@@ -36,12 +36,12 @@ import SkillPlanService from "../Services/SkillPlanService";
 const Community = () => {
   const snap = useSnapshot(state);
 
-  const getWorkoutStories = async () => {
+  const getStories = async () => {
     try {
-      const response = await WorkoutStoryService.getAllWorkoutStories();
+      const response = await StoryService.getAllStories();
       state.storyCards = response;
     } catch (error) {
-      console.log("Failed to fetch workout stories", error);
+      console.log("Failed to fetch  stories", error);
     }
   };
 
@@ -76,7 +76,7 @@ const Community = () => {
     }
 
     getAllUsers().then(() => {
-      getWorkoutStories();
+      getStories();
       getSkillPlans();
     });
   }, []);
@@ -103,9 +103,9 @@ const Community = () => {
 
       {/* ✅ Modals */}
       <UserProfileModal />
-      <CreateWorkoutStoryModal />
+      <CreateStoryModal />
       <CreateSkillPlanModal />
-      {snap.selectedWorkoutStory && <WorkoutStory />}
+      {snap.selectedStory && <Story />}
       <CreatePostModal />
       {snap.selectedPost && <UploadPostModal />}
       {snap.selectedUserProfile && <FriendProfileModal />}

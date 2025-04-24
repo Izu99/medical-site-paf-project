@@ -8,8 +8,8 @@ const StoryCard = ({ card }) => {
   const snap = useSnapshot(state);
 
   const handleClick = () => {
-    state.selectedWorkoutStory = card;
-    state.workoutStoryOpen = true;
+    state.selectedStory = card;
+    state.StoryOpen = true;
   };
 
   return (

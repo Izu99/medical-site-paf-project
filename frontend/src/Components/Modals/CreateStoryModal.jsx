@@ -4,18 +4,18 @@ import { UploadOutlined, PictureOutlined } from "@ant-design/icons";
 import { useSnapshot } from "valtio";
 import state from "../../Utils/Store";
 import UploadFileService from "../../Services/UploadFileService";
-import WorkoutStoryService from "../../Services/WorkoutStoryService";
+import StoryService from "../../Services/StoryService";
 
 const uploader = new UploadFileService();
 
-const CreateWorkoutStoryModal = () => {
+const CreateStoryModal = () => {
   const snap = useSnapshot(state);
   const [imageUploading, setImageUploading] = useState(false);
   const [image, setImage] = useState(null);
   const [loading, setLoading] = useState(false);
   const [form] = Form.useForm();
 
-  const handleCreateWorkoutStory = async () => {
+  const handleCreateStory = async () => {
     try {
       await form.validateFields();
       const values = form.getFieldsValue();
@@ -34,18 +34,18 @@ const CreateWorkoutStoryModal = () => {
         userId: snap.currentUser?.id,
       };
       
-      await WorkoutStoryService.createWorkoutStory(body);
-      state.storyCards = await WorkoutStoryService.getAllWorkoutStories();
-      message.success("Workout story created successfully");
+      await StoryService.createStory(body);
+      state.storyCards = await StoryService.getAllStories();
+      message.success(" story created successfully");
       form.resetFields();
       setImage(null);
-      state.createWorkoutStatusModalOpened = false;
+      state.createStatusModalOpened = false;
     } catch (error) {
       if (error.errorFields) {
         // Form validation errors handled by Ant Design
         return;
       }
-      message.error("Error creating workout story");
+      message.error("Error creating  story");
     } finally {
       setLoading(false);
     }
@@ -57,7 +57,7 @@ const CreateWorkoutStoryModal = () => {
       try {
         const url = await uploader.uploadFile(
           info.fileList[0].originFileObj,
-          "workoutStories"
+          "Stories"
         );
         setImage(url);
         message.success("Image uploaded successfully");
@@ -72,13 +72,13 @@ const CreateWorkoutStoryModal = () => {
   const handleCancel = () => {
     form.resetFields();
     setImage(null);
-    state.createWorkoutStatusModalOpened = false;
+    state.createStatusModalOpened = false;
   };
 
   return (
     <Modal
-      title="Create Workout Story"
-      open={snap.createWorkoutStatusModalOpened}
+      title="Create  Story"
+      open={snap.createStatusModalOpened}
       onCancel={handleCancel}
       footer={[
         <Button key="cancel" onClick={handleCancel}>
@@ -88,7 +88,7 @@ const CreateWorkoutStoryModal = () => {
           loading={loading}
           key="create"
           type="primary"
-          onClick={handleCreateWorkoutStory}
+          onClick={handleCreateStory}
           disabled={imageUploading}
         >
           Create
@@ -112,7 +112,7 @@ const CreateWorkoutStoryModal = () => {
           rules={[{ required: true, message: 'Please enter a description' }]}
         >
           <Input.TextArea 
-            placeholder="Describe your workout story" 
+            placeholder="Describe your  story" 
             rows={4}
           />
         </Form.Item>
@@ -161,4 +161,4 @@ const CreateWorkoutStoryModal = () => {
   );
 };
 
-export default CreateWorkoutStoryModal;
+export default CreateStoryModal;

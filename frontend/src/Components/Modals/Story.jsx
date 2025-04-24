@@ -4,14 +4,14 @@ import { UploadOutlined, UserOutlined } from "@ant-design/icons";
 import { useSnapshot } from "valtio";
 import state from "../../Utils/Store";
 import UploadFileService from "../../Services/UploadFileService";
-import WorkoutStoryService from "../../Services/WorkoutStoryService";
+import StoryService from "../../Services/StoryService";
 
 const uploadService = new UploadFileService();
 
-const WorkoutStory = () => {
+const Story = () => {
   const snap = useSnapshot(state);
   const userId = snap.currentUser?.id;
-  const workoutStory = snap.selectedWorkoutStory;
+  const Story = snap.selectedStory;
   const [imageUploading, setImageUploading] = useState(false);
   const [form] = Form.useForm();
   const [loading, setLoading] = useState(false);
@@ -21,34 +21,34 @@ const WorkoutStory = () => {
 
   useEffect(() => {
     form.setFieldsValue({
-      title: workoutStory?.title,
-      description: workoutStory?.description,
+      title: Story?.title,
+      description: Story?.description,
     });
     
     setUploadedImage(null);
     
-    // Find the author of the workout story
-    if (snap.users && workoutStory?.userId) {
-      const storyAuthor = snap.users.find(user => user.id === workoutStory.userId);
+    // Find the author of the  story
+    if (snap.users && Story?.userId) {
+      const storyAuthor = snap.users.find(user => user.id === Story.userId);
       setAuthor(storyAuthor);
     }
-  }, [workoutStory, snap.users, form]);
+  }, [Story, snap.users, form]);
 
   const [updatedStory, setUpdatedStory] = useState({
-    title: workoutStory?.title || "",
-    image: workoutStory?.image || "",
-    description: workoutStory?.description || "",
+    title: Story?.title || "",
+    image: Story?.image || "",
+    description: Story?.description || "",
   });
 
   const handleUpdate = async () => {
     try {
       setLoading(true);
-      await WorkoutStoryService.updateWorkoutStory(
-        snap.selectedWorkoutStory.id,
+      await StoryService.updateStory(
+        snap.selectedStory.id,
         updatedStory
       );
-      state.storyCards = await WorkoutStoryService.getAllWorkoutStories();
-      state.workoutStoryOpen = false;
+      state.storyCards = await StoryService.getAllStories();
+      state.StoryOpen = false;
       message.success("Story updated successfully");
       form.resetFields();
     } catch (error) {
@@ -61,12 +61,12 @@ const WorkoutStory = () => {
   const handleDelete = async () => {
     try {
       setDeleteLoading(true);
-      await WorkoutStoryService.deleteWorkoutStory(
-        snap.selectedWorkoutStory.id
+      await StoryService.deleteStory(
+        snap.selectedStory.id
       );
-      state.storyCards = await WorkoutStoryService.getAllWorkoutStories();
-      state.workoutStoryOpen = false;
-      message.success("Workout story deleted successfully");
+      state.storyCards = await StoryService.getAllStories();
+      state.StoryOpen = false;
+      message.success(" story deleted successfully");
     } catch (error) {
       message.error("Failed to delete story");
     } finally {
@@ -77,11 +77,11 @@ const WorkoutStory = () => {
   const handleCancel = () => {
     form.resetFields(); // Reset form fields to initial values
     setUpdatedStory({
-      title: workoutStory?.title || "",
-      image: workoutStory?.image || "",
-      description: workoutStory?.description || "",
+      title: Story?.title || "",
+      image: Story?.image || "",
+      description: Story?.description || "",
     });
-    state.workoutStoryOpen = false;
+    state.StoryOpen = false;
   };
 
   const handleFileChange = async (info) => {
@@ -90,7 +90,7 @@ const WorkoutStory = () => {
       try {
         const uploadedImageUrl = await uploadService.uploadFile(
           info.fileList[0].originFileObj, // The file object
-          "workoutStories" // The path in Firebase Storage
+          "Stories" // The path in Firebase Storage
         );
 
         // Update state with the uploaded image URL
@@ -105,7 +105,7 @@ const WorkoutStory = () => {
     }
   };
 
-  if (!workoutStory) {
+  if (!Story) {
     return null;
   }
 
@@ -118,13 +118,13 @@ const WorkoutStory = () => {
             icon={<UserOutlined />} 
             size="small"
           />
-          <span>{workoutStory.title}</span>
+          <span>{Story.title}</span>
         </div>
       }
-      open={snap.workoutStoryOpen}
+      open={snap.StoryOpen}
       onCancel={handleCancel}
       footer={
-        userId === workoutStory.userId
+        userId === Story.userId
           ? [
               <Button key="cancel" onClick={handleCancel}>
                 Cancel
@@ -157,21 +157,21 @@ const WorkoutStory = () => {
       bodyStyle={{ padding: "20px" }}
       width={600}
     >
-      {userId !== workoutStory.userId ? (
+      {userId !== Story.userId ? (
         <div className="story-view-container">
           <div className="story-image-wrapper">
             <img 
-              src={workoutStory?.image} 
-              alt={workoutStory?.title} 
+              src={Story?.image} 
+              alt={Story?.title} 
               className="story-full-image" 
             />
           </div>
           <div className="story-details">
-            <h3>{workoutStory?.title}</h3>
-            <p>{workoutStory?.description}</p>
-            {workoutStory.timestamp && (
+            <h3>{Story?.title}</h3>
+            <p>{Story?.description}</p>
+            {Story.timestamp && (
               <p className="story-timestamp">
-                {new Date(workoutStory.timestamp).toLocaleDateString()}
+                {new Date(Story.timestamp).toLocaleDateString()}
               </p>
             )}
           </div>
@@ -186,8 +186,8 @@ const WorkoutStory = () => {
             ) : (
               <img
                 className="edit-story-image"
-                src={uploadedImage || workoutStory?.image}
-                alt="Workout Story"
+                src={uploadedImage || Story?.image}
+                alt=" Story"
               />
             )}
           </div>
@@ -232,4 +232,4 @@ const WorkoutStory = () => {
   );
 };
 
-export default WorkoutStory;
+export default Story;

@@ -1,8 +1,8 @@
 import axios from "axios";
 import { BASE_URL } from "../constants";
 
-class WorkoutStatusUpdateService {
-  async createWorkoutStory(workoutStoryData) {
+class StatusUpdateService {
+  async createStory(StoryData) {
     const accessToken = localStorage.getItem("accessToken");
     const config = {
       headers: {
@@ -11,17 +11,17 @@ class WorkoutStatusUpdateService {
     };
     try {
       const response = await axios.post(
-        `${BASE_URL}/workoutStatusUpdates`,
-        workoutStoryData,
+        `${BASE_URL}/StatusUpdates`,
+        StoryData,
         config
       );
       return response.data;
     } catch (error) {
-      throw new Error("Failed to create workout story");
+      throw new Error("Failed to create  story");
     }
   }
 
-  async getWorkoutStoriesByUserId(userId) {
+  async getStoriesByUserId(userId) {
     try {
       const accessToken = localStorage.getItem("accessToken");
       const config = {
@@ -30,16 +30,16 @@ class WorkoutStatusUpdateService {
         },
       };
       const response = await axios.get(
-        `${BASE_URL}/workoutStatusUpdates/${userId}`,
+        `${BASE_URL}/StatusUpdates/${userId}`,
         config
       );
       return response.data;
     } catch (error) {
-      throw new Error("Failed to get workout stories");
+      throw new Error("Failed to get  stories");
     }
   }
 
-  async getAllWorkoutStories() {
+  async getAllStories() {
     try {
       const accessToken = localStorage.getItem("accessToken");
       const config = {
@@ -48,16 +48,16 @@ class WorkoutStatusUpdateService {
         },
       };
       const response = await axios.get(
-        `${BASE_URL}/workoutStatusUpdates`,
+        `${BASE_URL}/StatusUpdates`,
         config
       );
       return response.data;
     } catch (error) {
-      throw new Error("Failed to get all workout stories");
+      throw new Error("Failed to get all  stories");
     }
   }
 
-  async deleteWorkoutStory(updateId) {
+  async deleteStory(updateId) {
     try {
       const accessToken = localStorage.getItem("accessToken");
       const config = {
@@ -66,14 +66,14 @@ class WorkoutStatusUpdateService {
         },
       };
       await axios.delete(
-        `${BASE_URL}/workoutStatusUpdates/${updateId}`,
+        `${BASE_URL}/StatusUpdates/${updateId}`,
         config
       );
     } catch (error) {
-      throw new Error("Failed to delete workout story");
+      throw new Error("Failed to delete  story");
     }
   }
-  async updateWorkoutStory(updateId, workoutStoryData) {
+  async updateStory(updateId, StoryData) {
     try {
       const accessToken = localStorage.getItem("accessToken");
       const config = {
@@ -82,15 +82,15 @@ class WorkoutStatusUpdateService {
         },
       };
       const response = await axios.put(
-        `${BASE_URL}/workoutStatusUpdates/${updateId}`,
-        workoutStoryData,
+        `${BASE_URL}/StatusUpdates/${updateId}`,
+        StoryData,
         config
       );
       return response.data;
     } catch (error) {
-      throw new Error("Failed to update workout story");
+      throw new Error("Failed to update  story");
     }
   }
 }
 
-export default new WorkoutStatusUpdateService();
+export default new StatusUpdateService();
