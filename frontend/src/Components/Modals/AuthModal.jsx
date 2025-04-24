@@ -12,7 +12,7 @@ import {
 import {
   InboxOutlined,
   GoogleOutlined,
-  GithubOutlined,
+  GithubOutlined, 
 } from "@ant-design/icons";
 import UploadFileService from "../../Services/UploadFileService";
 import AuthService from "../../Services/AuthService";
